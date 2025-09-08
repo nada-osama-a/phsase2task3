@@ -63,7 +63,16 @@ axes[1, 1].imshow(convolve(img, (1/16) * np.array([[1, 2, 1],
 axes[1, 1].set_title('Gaussian Blur')
 axes[1, 1].axis('off')
 
-axes[1, 2].imshow(cv2.medianBlur(img, 5), cmap='gray')
+size = 5
+pad = size // 2
+padded = np.pad(img, pad, mode='constant', constant_values=0)
+median_output = np.zeros_like(img)
+
+for i in range(img.shape[0]):
+    for j in range(img.shape[1]):
+        region = padded[i:i+size, j:j+size].astype(np.float32)
+        median_output[i, j] = np.median(region)
+axes[1, 2].imshow(median_output, cmap='gray')
 axes[1, 2].set_title('Median Filter')
 axes[1, 2].axis('off')
 
